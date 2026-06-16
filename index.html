@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>筋トレ記録</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { overscroll-behavior: none; }
+    body {
+      background: #0b1221; color: #dde6f5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      min-height: 100vh; padding: 14px 14px 100px;
+      overscroll-behavior: none;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    input[type="number"] { -moz-appearance: textfield; }
+
+    /* Top actions */
+    .top-actions { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px; }
+    .icon-btn {
+      width: 40px; height: 40px; border-radius: 10px; background: #1a2540;
+      border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: #8099bb; -webkit-tap-highlight-color: transparent;
+    }
+    .icon-btn:active { background: #243050; }
+
+    /* Exercise cards */
+    .exercise-card { background: #1a2540; border-radius: 18px; margin-bottom: 12px; overflow: hidden; border: 2px solid transparent; transition: border-color .15s; }
+    .exercise-card.drag-over { border-color: #e05050; }
+    .exercise-card.dragging { opacity: 0.2; }
+    .exercise-header { display: flex; align-items: center; }
+    .drag-handle {
+      padding: 16px 8px 16px 12px; color: #3a4f6e; cursor: grab;
+      touch-action: none; user-select: none; flex-shrink: 0; -webkit-tap-highlight-color: transparent;
+    }
+    .ex-main {
+      display: flex; align-items: center; gap: 10px; flex: 1; padding: 14px 0;
+      cursor: pointer; min-width: 0; -webkit-tap-highlight-color: transparent; user-select: none;
+    }
+    .chevron { color: #8099bb; transition: transform .2s; flex-shrink: 0; }
+    .chevron.collapsed { transform: rotate(-90deg); }
+    .ex-name { font-size: 16px; font-weight: 700; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .muscle-tag { background: #242f48; color: #8099bb; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 7px; flex-shrink: 0; }
+    .del-ex-btn {
+      padding: 14px 14px 14px 6px; background: none; border: none; cursor: pointer;
+      color: #506080; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; flex-shrink: 0;
+    }
+    .del-ex-btn:active { color: #e05050; }
+
+    /* Sets */
+    .sets-head { display: grid; grid-template-columns: 36px 1fr 1fr 30px; padding: 7px 14px; font-size: 10px; font-weight: 700; color: #8099bb; letter-spacing: .1em; text-transform: uppercase; border-top: 1px solid #242f48; }
+    .sets-head span:nth-child(2), .sets-head span:nth-child(3) { text-align: center; }
+    .set-row { display: grid; grid-template-columns: 36px 1fr 1fr 30px; align-items: center; padding: 5px 14px; gap: 7px; }
+    .set-num { width: 28px; height: 28px; background: #242f48; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #b0c4de; }
+    .input-wrap { position: relative; display: flex; align-items: center; }
+    .set-input { width: 100%; background: #242f48; border: 2px solid transparent; border-radius: 9px; color: #e8f0fa; font-size: 17px; font-weight: 700; text-align: right; padding: 8px 28px 8px 8px; outline: none; transition: border-color .15s; -webkit-appearance: none; }
+    .set-input:focus { border-color: #e05050; background: #2b384f; }
+    .unit { position: absolute; right: 8px; font-size: 11px; font-weight: 600; color: #8099bb; pointer-events: none; }
+    .del-set-btn { background: none; border: none; cursor: pointer; color: #506080; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; }
+    .del-set-btn:active { color: #e05050; }
+    .add-set-btn { width: 100%; padding: 13px; background: none; border: none; border-top: 1px solid #242f48; color: #8099bb; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; -webkit-tap-highlight-color: transparent; }
+    .add-set-btn:active { background: #1f2e48; }
+
+    /* FAB */
+    .fab { position: fixed; bottom: 14px; left: 14px; right: 14px; padding: 18px; background: transparent; border: 2px solid #e05050; border-radius: 16px; color: #e05050; font-size: 16px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .fab:active { background: rgba(224,80,80,.12); }
+
+    /* Modals */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 100; display: flex; align-items: flex-end; backdrop-filter: blur(3px); }
+    .overlay.hidden { display: none; }
+    .modal { background: #1a2540; border-radius: 22px 22px 0 0; padding: 22px; width: 100%; max-height: 78vh; overflow-y: auto; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .modal-title { font-size: 18px; font-weight: 800; }
+    .modal-close { background: none; border: none; color: #8099bb; font-size: 22px; cursor: pointer; padding: 2px 6px; }
+    .edit-toggle-btn { background: #242f48; border: none; border-radius: 8px; color: #8099bb; font-size: 13px; font-weight: 600; padding: 6px 14px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .edit-toggle-btn.active { background: #e05050; color: white; }
+
+    /* Custom add form */
+    .custom-row { display: flex; gap: 8px; margin-bottom: 14px; }
+    .custom-input { flex: 1; background: #242f48; border: 2px solid transparent; border-radius: 11px; color: #e8f0fa; font-size: 15px; padding: 11px 13px; outline: none; }
+    .custom-input:focus { border-color: #e05050; }
+    .muscle-sel { background: #242f48; border: 2px solid transparent; border-radius: 11px; color: #e8f0fa; font-size: 15px; padding: 11px 10px; outline: none; -webkit-appearance: none; }
+    .modal-add-btn { background: #e05050; border: none; border-radius: 11px; color: #fff; font-size: 15px; font-weight: 700; padding: 11px 16px; cursor: pointer; white-space: nowrap; }
+    .modal-add-btn:active { background: #c84040; }
+
+    /* Preset list - normal mode */
+    .group-label { font-size: 11px; font-weight: 700; color: #8099bb; letter-spacing: .1em; text-transform: uppercase; margin: 12px 2px 6px; }
+    .preset-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #242f48; border-radius: 11px; border: none; width: 100%; text-align: left; color: #dde6f5; font-size: 15px; cursor: pointer; margin-bottom: 6px; -webkit-tap-highlight-color: transparent; }
+    .preset-item:active { background: #2e3c5a; }
+    .preset-item.used { opacity: .38; pointer-events: none; }
+    .pi-right { font-size: 12px; color: #8099bb; }
+
+    /* Edit mode - groups */
+    .muscle-group-block { margin-bottom: 4px; }
+    .muscle-group-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 11px; margin-bottom: 4px; background: #1e2d46; user-select: none; border: 2px solid transparent; transition: border-color .15s; }
+    .muscle-group-header.drag-target { border-color: #e05050; }
+    .group-drag-handle { color: #3a4f6e; cursor: grab; touch-action: none; flex-shrink: 0; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; }
+    .group-name-label { font-size: 12px; font-weight: 700; color: #8099bb; letter-spacing: .1em; text-transform: uppercase; flex: 1; }
+    .group-count { font-size: 11px; color: #506080; }
+
+    /* Edit mode - exercises */
+    .edit-ex-row { display: flex; align-items: center; padding: 9px 12px 9px 8px; background: #242f48; border-radius: 9px; margin-bottom: 5px; margin-left: 4px; border: 2px solid transparent; transition: border-color .15s; }
+    .edit-ex-row.drag-target { border-color: #e05050; }
+    .ex-drag-handle { color: #3a4f6e; cursor: grab; touch-action: none; flex-shrink: 0; padding: 2px 8px 2px 2px; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; }
+    .edit-ex-name { font-size: 14px; color: #dde6f5; flex: 1; }
+    .del-master-btn { background: none; border: none; cursor: pointer; color: #506080; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; flex-shrink: 0; }
+    .del-master-btn:active { color: #e05050; }
+
+    /* Ghost elements */
+    #drag-ghost { position: fixed; pointer-events: none; z-index: 999; opacity: 0.92; transform: scale(1.02); box-shadow: 0 12px 40px rgba(0,0,0,.6); border-radius: 18px; overflow: hidden; background: #1a2540; }
+    #group-drag-ghost { position: fixed; pointer-events: none; z-index: 998; background: #e05050; border-radius: 9px; padding: 8px 14px; color: white; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: 0.9; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
+    #ex-drag-ghost { position: fixed; pointer-events: none; z-index: 997; background: #e05050; border-radius: 9px; padding: 9px 14px; color: white; font-size: 14px; opacity: 0.9; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
+
+    .empty { text-align: center; color: #506080; padding: 40px 20px; font-size: 15px; line-height: 1.7; }
+    .toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%) translateY(-10px); background: #2e3c5a; color: #dde6f5; padding: 10px 18px; border-radius: 11px; font-size: 14px; font-weight: 600; z-index: 1000; opacity: 0; transition: opacity .25s, transform .25s; white-space: nowrap; pointer-events: none; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="top-actions">
+    <button class="icon-btn" onclick="copyMarkdown()" title="Markdownコピー">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+    </button>
+  </div>
+  <div id="exerciseList"></div>
+</div>
+
+<button class="fab" onclick="openAddModal()">+ 種目を追加</button>
+
+<!-- Add / Edit list modal -->
+<div class="overlay hidden" id="addOverlay" onclick="if(event.target===this)closeAddModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="addModalTitle">種目を追加</div>
+      <button class="edit-toggle-btn" id="editToggleBtn" onclick="toggleEditMode()">リストを編集</button>
+    </div>
+    <div class="custom-row">
+      <input class="custom-input" type="text" id="customName" placeholder="新しい種目名">
+      <select class="muscle-sel" id="customMuscle">
+        <option value="胸">胸</option><option value="背中">背中</option>
+        <option value="肩">肩</option><option value="腕">腕</option>
+        <option value="脚">脚</option><option value="体幹">体幹</option>
+        <option value="その他">その他</option>
+      </select>
+      <button class="modal-add-btn" id="customAddBtn" onclick="addCustom()">追加</button>
+    </div>
+    <div id="presetList"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Default list ──────────────────────────────────────────────────────────────
+const DEFAULT_LIST = [
+    {name:'ベンチプレス',muscle:'胸'},
+    {name:'インクラインダンベルプレス',muscle:'胸'},
+    {name:'ペックフライ', muscle:'胸'},
+    {name:'ダンベルフライ',muscle:'胸'},
+    {name:'ディップス',muscle:'胸'},
+    {name:'デッドリフト',muscle:'背中'},
+    {name:'ラットプルダウン',muscle:'背中'},
+    {name:'懸垂', muscle:'背中'},
+    {name:'ショルダープレス',muscle:'肩'},
+    {name:'サイドレイズ',muscle:'肩'},
+    {name:'フロントレイズ',muscle:'肩'},
+    {name:'リアデルトフライ',muscle:'肩'},
+    {name:'バーベルカール',muscle:'腕'},
+    {name:'ダンベルカール',muscle:'腕'},
+    {name:'ハンマーカール',muscle:'腕'},
+    {name:'スクワット',muscle:'脚'},
+    {name:'ブルガリアンスクワット',muscle:'脚'},
+    {name:'ルーマニアンデッドリフト',muscle:'脚'},
+    {name:'レッグプレス',muscle:'脚'},
+    {name:'レッグカール',muscle:'脚'},
+    {name:'レッグエクステンション',muscle:'脚'},
+    {name:'プランク',muscle:'体幹'},
+    {name:'クランチ',muscle:'体幹'},
+    {name:'ロシアンツイスト',muscle:'体幹'},
+    {name:'レッグレイズ',muscle:'体幹'},
+];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let exercises = [], uid = 1;
+let masterList = [];
+let editMode = false;
+
+// ── Storage ───────────────────────────────────────────────────────────────────
+function loadMasterList() {
+  try {
+    const s=localStorage.getItem('workout_master_v1');
+    masterList=s?JSON.parse(s):[...DEFAULT_LIST];
+  } catch { masterList=[...DEFAULT_LIST]; }
+}
+function saveMasterList() {
+  try { localStorage.setItem('workout_master_v1',JSON.stringify(masterList)); } catch{}
+}
+
+// ── Exercises (current workout) ───────────────────────────────────────────────
+function addExercise(name,muscle){ exercises.push({id:uid++,name,muscle,collapsed:false,sets:[{w:'',r:''}]}); renderExercises(); }
+function deleteExercise(id){ exercises=exercises.filter(e=>e.id!==id); renderExercises(); }
+function toggleCollapse(id){ const ex=exercises.find(e=>e.id===id); if(ex){ex.collapsed=!ex.collapsed;saveCurrent();renderExercises();} }
+function addSet(id){ const ex=exercises.find(e=>e.id===id); if(!ex)return; const p=ex.sets[ex.sets.length-1]; ex.sets.push({w:p?p.w:'',r:p?p.r:''}); saveCurrent();renderExercises(); }
+function deleteSet(id,i){ const ex=exercises.find(e=>e.id===id); if(ex&&ex.sets.length>1){ex.sets.splice(i,1);saveCurrent();renderExercises();} }
+function setW(id,i,v){ const ex=exercises.find(e=>e.id===id); if(ex){ex.sets[i].w=v;} }
+function setR(id,i,v){ const ex=exercises.find(e=>e.id===id); if(ex){ex.sets[i].r=v;} }
+
+// ── Workout card drag ─────────────────────────────────────────────────────────
+let drag=null;
+function dragStart(e,id){
+  e.preventDefault();
+  const cy=e.touches?e.touches[0].clientY:e.clientY;
+  const card=document.getElementById('ex-'+id);
+  const rect=card.getBoundingClientRect();
+  const ghost=card.cloneNode(true); ghost.id='drag-ghost';
+  ghost.style.top=rect.top+'px'; ghost.style.left=rect.left+'px'; ghost.style.width=rect.width+'px';
+  document.body.appendChild(ghost); card.classList.add('dragging');
+  drag={id,card,ghost,oY:cy-rect.top,tIdx:exercises.findIndex(e=>e.id===id)};
+  document.addEventListener('touchmove',onDragMove,{passive:false});
+  document.addEventListener('touchend',onDragEnd);
+  document.addEventListener('mousemove',onDragMove);
+  document.addEventListener('mouseup',onDragEnd);
+}
+function onDragMove(e){
+  if(!drag)return; e.preventDefault();
+  const cy=e.touches?e.touches[0].clientY:e.clientY;
+  drag.ghost.style.top=(cy-drag.oY)+'px';
+  const gcy=cy-drag.oY+drag.ghost.offsetHeight/2;
+  let bi=drag.tIdx,bd=Infinity;
+  exercises.forEach((ex,i)=>{
+    if(ex.id===drag.id)return;
+    const el=document.getElementById('ex-'+ex.id); if(!el)return;
+    const r=el.getBoundingClientRect(); const d=Math.abs(gcy-(r.top+r.height/2));
+    if(d<bd){bd=d;bi=i;}
+  });
+  document.querySelectorAll('.exercise-card').forEach(c=>c.classList.remove('drag-over'));
+  if(bi!==exercises.findIndex(e=>e.id===drag.id)){ const t=document.getElementById('ex-'+(exercises[bi]?.id)); if(t)t.classList.add('drag-over'); }
+  drag.tIdx=bi;
+}
+function onDragEnd(){
+  if(!drag)return;
+  document.removeEventListener('touchmove',onDragMove); document.removeEventListener('touchend',onDragEnd);
+  document.removeEventListener('mousemove',onDragMove); document.removeEventListener('mouseup',onDragEnd);
+  const fi=exercises.findIndex(e=>e.id===drag.id);
+  if(fi!==drag.tIdx){const[m]=exercises.splice(fi,1);exercises.splice(drag.tIdx,0,m);}
+  document.querySelectorAll('.exercise-card').forEach(c=>c.classList.remove('drag-over'));
+  drag.ghost.remove(); drag.card.classList.remove('dragging'); drag=null; renderExercises();
+}
+
+// ── Render workout ────────────────────────────────────────────────────────────
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function renderExercises(){
+  const el=document.getElementById('exerciseList');
+  if(!exercises.length){ el.innerHTML='<div class="empty">種目を追加して<br>トレーニングを記録しよう</div>'; return; }
+  el.innerHTML=exercises.map(ex=>`
+    <div class="exercise-card" id="ex-${ex.id}">
+      <div class="exercise-header">
+        <div class="drag-handle" ontouchstart="dragStart(event,${ex.id})" onmousedown="dragStart(event,${ex.id})">
+          <svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="2.5" cy="2" r="1.5"/><circle cx="7.5" cy="2" r="1.5"/><circle cx="2.5" cy="7" r="1.5"/><circle cx="7.5" cy="7" r="1.5"/><circle cx="2.5" cy="12" r="1.5"/><circle cx="7.5" cy="12" r="1.5"/></svg>
+        </div>
+        <div class="ex-main" onclick="toggleCollapse(${ex.id})">
+          <svg class="chevron ${ex.collapsed?'collapsed':''}" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          <span class="ex-name">${esc(ex.name)}</span>
+          <span class="muscle-tag">${esc(ex.muscle)}</span>
+        </div>
+        <button class="del-ex-btn" onclick="deleteExercise(${ex.id})">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        </button>
+      </div>
+      ${!ex.collapsed?`
+        <div>
+          <div class="sets-head"><span>#</span><span>WEIGHT</span><span>REPS</span><span></span></div>
+          ${ex.sets.map((s,i)=>`
+            <div class="set-row">
+              <div class="set-num">${i+1}</div>
+              <div class="input-wrap"><input class="set-input" type="number" inputmode="decimal" value="${esc(s.w)}" placeholder="0" oninput="setW(${ex.id},${i},this.value)"><span class="unit">kg</span></div>
+              <div class="input-wrap"><input class="set-input" type="number" inputmode="numeric" value="${esc(s.r)}" placeholder="0" oninput="setR(${ex.id},${i},this.value)"><span class="unit">rep</span></div>
+              <button class="del-set-btn" onclick="deleteSet(${ex.id},${i})"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+          `).join('')}
+          <button class="add-set-btn" onclick="addSet(${ex.id})">+ セットを追加</button>
+        </div>
+      `:''}
+    </div>
+  `).join('');
+}
+
+// ── Add modal ─────────────────────────────────────────────────────────────────
+function openAddModal(){
+  editMode=false;
+  document.getElementById('addModalTitle').textContent='種目を追加';
+  document.getElementById('editToggleBtn').textContent='リストを編集';
+  document.getElementById('editToggleBtn').classList.remove('active');
+  document.getElementById('customAddBtn').textContent='追加';
+  document.getElementById('addOverlay').classList.remove('hidden');
+  renderPresets();
+}
+function closeAddModal(){ document.getElementById('addOverlay').classList.add('hidden'); document.getElementById('customName').value=''; editMode=false; }
+function toggleEditMode(){
+  editMode=!editMode;
+  document.getElementById('addModalTitle').textContent=editMode?'種目リストを編集':'種目を追加';
+  document.getElementById('editToggleBtn').textContent=editMode?'完了':'リストを編集';
+  document.getElementById('editToggleBtn').classList.toggle('active',editMode);
+  document.getElementById('customAddBtn').textContent=editMode?'リストに追加':'追加';
+  renderPresets();
+}
+
+// ── Render presets ────────────────────────────────────────────────────────────
+function getGroups(){ const seen=new Set(),o=[]; masterList.forEach(e=>{if(!seen.has(e.muscle)){seen.add(e.muscle);o.push(e.muscle);}}); return o; }
+
+function renderPresets(){
+  const used=new Set(exercises.map(e=>e.name));
+  const groups=getGroups();
+  let html='';
+
+  if(editMode){
+    // Each exercise gets its masterList index as data attribute
+    groups.forEach(muscle=>{
+      const safeId='mg_'+muscle.replace(/\s/g,'_');
+      const items=masterList.map((e,i)=>({e,i})).filter(({e})=>e.muscle===muscle);
+      html+=`<div class="muscle-group-block" data-muscle="${esc(muscle)}" id="${safeId}">
+        <div class="muscle-group-header">
+          <div class="group-drag-handle" ontouchstart="groupDragStart(event,'${esc(muscle)}')" onmousedown="groupDragStart(event,'${esc(muscle)}')">
+            <svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="2.5" cy="2" r="1.5"/><circle cx="7.5" cy="2" r="1.5"/><circle cx="2.5" cy="7" r="1.5"/><circle cx="7.5" cy="7" r="1.5"/><circle cx="2.5" cy="12" r="1.5"/><circle cx="7.5" cy="12" r="1.5"/></svg>
+          </div>
+          <span class="group-name-label">${esc(muscle)}</span>
+          <span class="group-count">${items.length}種目</span>
+        </div>
+        ${items.map(({e,i})=>`
+          <div class="edit-ex-row" data-ml-idx="${i}">
+            <div class="ex-drag-handle" ontouchstart="exDragStart(event,${i})" onmousedown="exDragStart(event,${i})">
+              <svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="2.5" cy="2" r="1.5"/><circle cx="7.5" cy="2" r="1.5"/><circle cx="2.5" cy="7" r="1.5"/><circle cx="7.5" cy="7" r="1.5"/><circle cx="2.5" cy="12" r="1.5"/><circle cx="7.5" cy="12" r="1.5"/></svg>
+            </div>
+            <span class="edit-ex-name">${esc(e.name)}</span>
+            <button class="del-master-btn" onclick="deleteMasterExercise(${i})">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+            </button>
+          </div>
+        `).join('')}
+      </div>`;
+    });
+  } else {
+    groups.forEach(muscle=>{
+      const items=masterList.filter(e=>e.muscle===muscle);
+      html+=`<div class="group-label">${esc(muscle)}</div>`;
+      items.forEach(ex=>{
+        const u=used.has(ex.name);
+        html+=`<button class="preset-item ${u?'used':''}" onclick="pickPreset('${esc(ex.name)}','${esc(ex.muscle)}')"><span>${esc(ex.name)}</span><span class="pi-right">${u?'追加済み':'+'}</span></button>`;
+      });
+    });
+  }
+  document.getElementById('presetList').innerHTML=html;
+}
+
+function pickPreset(name,muscle){ addExercise(name,muscle); closeAddModal(); toast(`${name} を追加しました`); }
+
+function addCustom(){
+  const name=document.getElementById('customName').value.trim();
+  const muscle=document.getElementById('customMuscle').value;
+  if(!name){toast('種目名を入力してください');return;}
+  if(masterList.some(e=>e.name===name)){toast(`「${name}」は既にリストにあります`);return;}
+  masterList.push({name,muscle});
+  saveMasterList();
+  document.getElementById('customName').value='';
+  if(editMode){ renderPresets(); toast(`「${name}」をリストに追加しました`); }
+  else { addExercise(name,muscle); closeAddModal(); toast(`${name} を追加しました`); }
+}
+
+function deleteMasterExercise(idx){
+  const name=masterList[idx]?.name; if(!name) return;
+  if(!confirm(`「${name}」をリストから削除しますか？`)) return;
+  masterList.splice(idx,1);
+  saveMasterList(); renderPresets();
+  toast(`「${name}」を削除しました`);
+}
+
+// ── Group drag ────────────────────────────────────────────────────────────────
+let groupDrag=null;
+function getGroupEl(muscle){ return document.querySelector(`[data-muscle="${muscle}"]`); }
+
+function groupDragStart(e,muscle){
+  e.preventDefault(); e.stopPropagation();
+  const cy=e.touches?e.touches[0].clientY:e.clientY;
+  const gEl=getGroupEl(muscle); if(!gEl)return;
+  const hEl=gEl.querySelector('.muscle-group-header');
+  const rect=hEl.getBoundingClientRect();
+  const ghost=document.createElement('div'); ghost.id='group-drag-ghost';
+  ghost.textContent=muscle; ghost.style.top=rect.top+'px'; ghost.style.left=rect.left+'px'; ghost.style.width=rect.width+'px';
+  document.body.appendChild(ghost);
+  hEl.style.opacity='0.2';
+  groupDrag={muscle,gEl,hEl,ghost,oY:cy-rect.top,tMuscle:muscle};
+  document.addEventListener('touchmove',onGroupDragMove,{passive:false});
+  document.addEventListener('touchend',onGroupDragEnd);
+  document.addEventListener('mousemove',onGroupDragMove);
+  document.addEventListener('mouseup',onGroupDragEnd);
+}
+function onGroupDragMove(e){
+  if(!groupDrag)return; e.preventDefault();
+  const cy=e.touches?e.touches[0].clientY:e.clientY;
+  groupDrag.ghost.style.top=(cy-groupDrag.oY)+'px';
+  const groups=getGroups(); let bm=groupDrag.tMuscle,bd=Infinity;
+  groups.forEach(m=>{
+    if(m===groupDrag.muscle)return;
+    const el=getGroupEl(m); if(!el)return;
+    const h=el.querySelector('.muscle-group-header'); if(!h)return;
+    const r=h.getBoundingClientRect(); const d=Math.abs(cy-(r.top+r.height/2));
+    if(d<bd){bd=d;bm=m;}
+  });
+  document.querySelectorAll('.muscle-group-header').forEach(h=>h.classList.remove('drag-target'));
+  if(bm!==groupDrag.muscle){ const t=getGroupEl(bm); if(t)t.querySelector('.muscle-group-header')?.classList.add('drag-target'); }
+  groupDrag.tMuscle=bm;
+}
+function onGroupDragEnd(){
+  if(!groupDrag)return;
+  document.removeEventListener('touchmove',onGroupDragMove); document.removeEventListener('touchend',onGroupDragEnd);
+  document.removeEventListener('mousemove',onGroupDragMove); document.removeEventListener('mouseup',onGroupDragEnd);
+  if(groupDrag.tMuscle!==groupDrag.muscle){
+    const from=groupDrag.muscle,to=groupDrag.tMuscle;
+    const fi=masterList.filter(e=>e.muscle===from);
+    const rest=masterList.filter(e=>e.muscle!==from);
+    const ii=rest.findIndex(e=>e.muscle===to);
+    masterList=ii===-1?[...rest,...fi]:[...rest.slice(0,ii),...fi,...rest.slice(ii)];
+    saveMasterList();
+  }
+  document.querySelectorAll('.muscle-group-header').forEach(h=>h.classList.remove('drag-target'));
+  groupDrag.ghost.remove(); groupDrag.hEl.style.opacity=''; groupDrag=null; renderPresets();
+}
+
+// ── Within-group exercise drag ────────────────────────────────────────────────
+let exDrag=null;
+function getExEditEl(idx){ return document.querySelector(`[data-ml-idx="${idx}"]`); }
+
+function exDragStart(e,mlIdx){
+  e.preventDefault(); e.stopPropagation();
+  const cy=e.touches?e.touches[0].clientY:e.clientY;
+  const row=getExEditEl(mlIdx); if(!row)return;
+  const rect=row.getBoundingClientRect();
+  const ghost=document.createElement('div'); ghost.id='ex-drag-ghost';
+  ghost.textContent=masterList[mlIdx]?.name||'';
+  ghost.style.top=rect.top+'px'; ghost.style.left=rect.left+'px'; ghost.style.width=rect.width+'px';
+  document.body.appendChild(ghost);
+  row.style.opacity='0.2';
+  const muscle=masterList[mlIdx]?.muscle;
+  exDrag={mlIdx,muscle,row,ghost,oY:cy-rect.top,tIdx:mlIdx};
+  document.addEventListener('touchmove',onExDragMove,{passive:false});
+  document.addEventListener('touchend',onExDragEnd);
+  document.addEventListener('mousemove',onExDragMove);
+  document.addEventListener('mouseup',onExDragEnd);
+}
+function onExDragMove(e){
+  if(!exDrag)return; e.preventDefault();
+  const cy=e.touches?e.touches[0].clientY:e.clientY;
+  exDrag.ghost.style.top=(cy-exDrag.oY)+'px';
+  // only consider same-muscle exercises as targets
+  const sameGroup=masterList.map((ex,i)=>({ex,i})).filter(({ex})=>ex.muscle===exDrag.muscle);
+  let bi=exDrag.tIdx,bd=Infinity;
+  sameGroup.forEach(({i})=>{
+    if(i===exDrag.mlIdx)return;
+    const el=getExEditEl(i); if(!el)return;
+    const r=el.getBoundingClientRect(); const d=Math.abs(cy-(r.top+r.height/2));
+    if(d<bd){bd=d;bi=i;}
+  });
+  document.querySelectorAll('.edit-ex-row').forEach(r=>r.classList.remove('drag-target'));
+  if(bi!==exDrag.mlIdx){ const t=getExEditEl(bi); if(t)t.classList.add('drag-target'); }
+  exDrag.tIdx=bi;
+}
+function onExDragEnd(){
+  if(!exDrag)return;
+  document.removeEventListener('touchmove',onExDragMove); document.removeEventListener('touchend',onExDragEnd);
+  document.removeEventListener('mousemove',onExDragMove); document.removeEventListener('mouseup',onExDragEnd);
+  if(exDrag.tIdx!==exDrag.mlIdx){
+    const[moved]=masterList.splice(exDrag.mlIdx,1);
+    masterList.splice(exDrag.tIdx,0,moved);
+    saveMasterList();
+  }
+  document.querySelectorAll('.edit-ex-row').forEach(r=>r.classList.remove('drag-target'));
+  exDrag.ghost.remove(); exDrag.row.style.opacity=''; exDrag=null; renderPresets();
+}
+
+// ── Copy markdown ─────────────────────────────────────────────────────────────
+function copyMarkdown(){
+  if(!exercises.length){toast('記録がありません');return;}
+  let md='',ok=false;
+  exercises.forEach(ex=>{
+    const v=ex.sets.filter(s=>s.w!==''||s.r!==''); if(!v.length)return; ok=true;
+    md+=`## ${ex.name} (${ex.muscle})\n`;
+    v.forEach((s,i)=>{md+=`${i+1}. ${s.w||'0'}kg × ${s.r||'0'} rep\n`;});
+    md+='\n';
+  });
+  if(!ok){toast('記録がありません');return;}
+  md=md.trimEnd();
+  navigator.clipboard?navigator.clipboard.writeText(md).then(()=>toast('コピーしました ✓')).catch(()=>fbCopy(md)):fbCopy(md);
+}
+function fbCopy(t){
+  const ta=document.createElement('textarea'); ta.value=t;
+  Object.assign(ta.style,{position:'fixed',opacity:'0',top:'0',left:'0'});
+  document.body.appendChild(ta); ta.select();
+  try{document.execCommand('copy');toast('コピーしました ✓');}catch{toast('コピーに失敗しました');}
+  document.body.removeChild(ta);
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),2400);
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+function hasData() { return exercises.length > 0; }
+
+// Desktop: 更新・タブ閉じに対する警告
+window.addEventListener('beforeunload', e => {
+  if (hasData()) { e.preventDefault(); e.returnValue = ''; }
+});
+
+// iOS Safari: 戻るボタン・スワイプバックに対する警告
+history.pushState(null, '', location.href);
+window.addEventListener('popstate', () => {
+  if (hasData()) {
+    history.pushState(null, '', location.href);
+    if (confirm('ページを離れますか？\n入力した記録は失われます。')) {
+      history.go(-2);
+    }
+  }
+});
+
+loadMasterList();
+renderExercises();
+</script>
+</body>
+</html>
