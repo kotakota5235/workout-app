@@ -8,7 +8,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { overscroll-behavior: none; }
     body {
-      background: #0b1221; color: #dde6f5;
+      background: #0D0B12; color: #F2F0FA;
       font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
       min-height: 100vh; padding: 14px 14px 100px;
       overscroll-behavior: none;
@@ -20,101 +20,101 @@
     /* Top actions */
     .top-actions { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px; }
     .icon-btn {
-      width: 40px; height: 40px; border-radius: 10px; background: #1a2540;
+      width: 40px; height: 40px; border-radius: 10px; background: #1B1427;
       border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
-      color: #8099bb; -webkit-tap-highlight-color: transparent;
+      color: #9B89C0; -webkit-tap-highlight-color: transparent;
     }
-    .icon-btn:active { background: #243050; }
+    .icon-btn:active { background: #251B36; }
 
     /* Exercise cards */
-    .exercise-card { background: #1a2540; border-radius: 18px; margin-bottom: 12px; overflow: hidden; border: 2px solid transparent; transition: border-color .15s; }
-    .exercise-card.drag-over { border-color: #e05050; }
+    .exercise-card { background: #1B1427; border-radius: 18px; margin-bottom: 12px; overflow: hidden; border: 2px solid transparent; transition: border-color .15s; }
+    .exercise-card.drag-over { border-color: #7D39EB; }
     .exercise-card.dragging { opacity: 0.2; }
     .exercise-header { display: flex; align-items: center; }
     .drag-handle {
-      padding: 16px 8px 16px 12px; color: #3a4f6e; cursor: grab;
+      padding: 16px 8px 16px 12px; color: #4D3D70; cursor: grab;
       touch-action: none; user-select: none; flex-shrink: 0; -webkit-tap-highlight-color: transparent;
     }
     .ex-main {
       display: flex; align-items: center; gap: 10px; flex: 1; padding: 14px 0;
       cursor: pointer; min-width: 0; -webkit-tap-highlight-color: transparent; user-select: none;
     }
-    .chevron { color: #8099bb; transition: transform .2s; flex-shrink: 0; }
+    .chevron { color: #9B89C0; transition: transform .2s; flex-shrink: 0; }
     .chevron.collapsed { transform: rotate(-90deg); }
     .ex-name { font-size: 16px; font-weight: 700; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .muscle-tag { background: #242f48; color: #8099bb; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 7px; flex-shrink: 0; }
+    .muscle-tag { background: #251B36; color: #9B89C0; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 7px; flex-shrink: 0; }
     .del-ex-btn {
       padding: 14px 14px 14px 6px; background: none; border: none; cursor: pointer;
-      color: #506080; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; flex-shrink: 0;
+      color: #6B5892; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; flex-shrink: 0;
     }
-    .del-ex-btn:active { color: #e05050; }
+    .del-ex-btn:active { color: #7D39EB; }
 
     /* Sets */
-    .sets-head { display: grid; grid-template-columns: 36px 1fr 1fr 30px; padding: 7px 14px; font-size: 10px; font-weight: 700; color: #8099bb; letter-spacing: .1em; text-transform: uppercase; border-top: 1px solid #242f48; }
+    .sets-head { display: grid; grid-template-columns: 36px 1fr 1fr 30px; padding: 7px 14px; font-size: 10px; font-weight: 700; color: #9B89C0; letter-spacing: .1em; text-transform: uppercase; border-top: 1px solid #251B36; }
     .sets-head span:nth-child(2), .sets-head span:nth-child(3) { text-align: center; }
     .set-row { display: grid; grid-template-columns: 36px 1fr 1fr 30px; align-items: center; padding: 5px 14px; gap: 7px; }
-    .set-num { width: 28px; height: 28px; background: #242f48; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #b0c4de; }
+    .set-num { width: 28px; height: 28px; background: #251B36; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #B5E82E; }
     .input-wrap { position: relative; display: flex; align-items: center; }
-    .set-input { width: 100%; background: #242f48; border: 2px solid transparent; border-radius: 9px; color: #e8f0fa; font-size: 17px; font-weight: 700; text-align: right; padding: 8px 28px 8px 8px; outline: none; transition: border-color .15s; -webkit-appearance: none; }
-    .set-input:focus { border-color: #e05050; background: #2b384f; }
-    .unit { position: absolute; right: 8px; font-size: 11px; font-weight: 600; color: #8099bb; pointer-events: none; }
-    .del-set-btn { background: none; border: none; cursor: pointer; color: #506080; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; }
-    .del-set-btn:active { color: #e05050; }
-    .add-set-btn { width: 100%; padding: 13px; background: none; border: none; border-top: 1px solid #242f48; color: #8099bb; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; -webkit-tap-highlight-color: transparent; }
-    .add-set-btn:active { background: #1f2e48; }
+    .set-input { width: 100%; background: #251B36; border: 2px solid transparent; border-radius: 9px; color: #B5E82E; font-size: 17px; font-weight: 700; text-align: right; padding: 8px 28px 8px 8px; outline: none; transition: border-color .15s; -webkit-appearance: none; }
+    .set-input:focus { border-color: #7D39EB; background: #2A1E45; }
+    .unit { position: absolute; right: 8px; font-size: 11px; font-weight: 600; color: #9B89C0; pointer-events: none; }
+    .del-set-btn { background: none; border: none; cursor: pointer; color: #6B5892; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; }
+    .del-set-btn:active { color: #7D39EB; }
+    .add-set-btn { width: 100%; padding: 13px; background: none; border: none; border-top: 1px solid #251B36; color: #9B89C0; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; -webkit-tap-highlight-color: transparent; }
+    .add-set-btn:active { background: #1E1535; }
 
     /* FAB */
-    .fab { position: fixed; bottom: 14px; left: 14px; right: 14px; padding: 18px; background: transparent; border: 2px solid #e05050; border-radius: 16px; color: #e05050; font-size: 16px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .fab:active { background: rgba(224,80,80,.12); }
+    .fab { position: fixed; bottom: 14px; left: 14px; right: 14px; padding: 18px; background: transparent; border: 2px solid #B5E82E; border-radius: 16px; color: #B5E82E; font-size: 16px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .fab:active { background: rgba(181,232,46,.12); }
 
     /* Modals */
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 100; display: flex; align-items: flex-end; backdrop-filter: blur(3px); }
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 100; display: flex; align-items: flex-end; backdrop-filter: blur(3px); }
     .overlay.hidden { display: none; }
-    .modal { background: #1a2540; border-radius: 22px 22px 0 0; padding: 22px; width: 100%; max-height: 78vh; overflow-y: auto; }
+    .modal { background: #1B1427; border-radius: 22px 22px 0 0; padding: 22px; width: 100%; max-height: 78vh; overflow-y: auto; }
     .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
     .modal-title { font-size: 18px; font-weight: 800; }
-    .modal-close { background: none; border: none; color: #8099bb; font-size: 22px; cursor: pointer; padding: 2px 6px; }
-    .edit-toggle-btn { background: #242f48; border: none; border-radius: 8px; color: #8099bb; font-size: 13px; font-weight: 600; padding: 6px 14px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .edit-toggle-btn.active { background: #e05050; color: white; }
+    .modal-close { background: none; border: none; color: #9B89C0; font-size: 22px; cursor: pointer; padding: 2px 6px; }
+    .edit-toggle-btn { background: #251B36; border: none; border-radius: 8px; color: #9B89C0; font-size: 13px; font-weight: 600; padding: 6px 14px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .edit-toggle-btn.active { background: #7D39EB; color: #F2F0FA; }
 
     /* Custom add form */
     .custom-row { display: flex; gap: 8px; margin-bottom: 14px; }
-    .custom-input { flex: 1; background: #242f48; border: 2px solid transparent; border-radius: 11px; color: #e8f0fa; font-size: 15px; padding: 11px 13px; outline: none; }
-    .custom-input:focus { border-color: #e05050; }
-    .muscle-sel { background: #242f48; border: 2px solid transparent; border-radius: 11px; color: #e8f0fa; font-size: 15px; padding: 11px 10px; outline: none; -webkit-appearance: none; }
-    .modal-add-btn { background: #e05050; border: none; border-radius: 11px; color: #fff; font-size: 15px; font-weight: 700; padding: 11px 16px; cursor: pointer; white-space: nowrap; }
-    .modal-add-btn:active { background: #c84040; }
+    .custom-input { flex: 1; background: #251B36; border: 2px solid transparent; border-radius: 11px; color: #B5E82E; font-size: 15px; padding: 11px 13px; outline: none; }
+    .custom-input:focus { border-color: #7D39EB; }
+    .muscle-sel { background: #251B36; border: 2px solid transparent; border-radius: 11px; color: #F2F0FA; font-size: 15px; padding: 11px 10px; outline: none; -webkit-appearance: none; }
+    .modal-add-btn { background: #7D39EB; border: none; border-radius: 11px; color: #F2F0FA; font-size: 15px; font-weight: 700; padding: 11px 16px; cursor: pointer; white-space: nowrap; }
+    .modal-add-btn:active { background: #6A2CC8; }
 
     /* Preset list - normal mode */
-    .group-label { font-size: 11px; font-weight: 700; color: #8099bb; letter-spacing: .1em; text-transform: uppercase; margin: 12px 2px 6px; }
-    .preset-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #242f48; border-radius: 11px; border: none; width: 100%; text-align: left; color: #dde6f5; font-size: 15px; cursor: pointer; margin-bottom: 6px; -webkit-tap-highlight-color: transparent; }
-    .preset-item:active { background: #2e3c5a; }
+    .group-label { font-size: 11px; font-weight: 700; color: #9B89C0; letter-spacing: .1em; text-transform: uppercase; margin: 12px 2px 6px; }
+    .preset-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #251B36; border-radius: 11px; border: none; width: 100%; text-align: left; color: #F2F0FA; font-size: 15px; cursor: pointer; margin-bottom: 6px; -webkit-tap-highlight-color: transparent; }
+    .preset-item:active { background: #2F2445; }
     .preset-item.used { opacity: .38; pointer-events: none; }
-    .pi-right { font-size: 12px; color: #8099bb; }
+    .pi-right { font-size: 12px; color: #9B89C0; }
 
     /* Edit mode - groups */
     .muscle-group-block { margin-bottom: 4px; }
-    .muscle-group-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 11px; margin-bottom: 4px; background: #1e2d46; user-select: none; border: 2px solid transparent; transition: border-color .15s; }
-    .muscle-group-header.drag-target { border-color: #e05050; }
-    .group-drag-handle { color: #3a4f6e; cursor: grab; touch-action: none; flex-shrink: 0; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; }
-    .group-name-label { font-size: 12px; font-weight: 700; color: #8099bb; letter-spacing: .1em; text-transform: uppercase; flex: 1; }
-    .group-count { font-size: 11px; color: #506080; }
+    .muscle-group-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 11px; margin-bottom: 4px; background: #201740; user-select: none; border: 2px solid transparent; transition: border-color .15s; }
+    .muscle-group-header.drag-target { border-color: #7D39EB; }
+    .group-drag-handle { color: #4D3D70; cursor: grab; touch-action: none; flex-shrink: 0; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; }
+    .group-name-label { font-size: 12px; font-weight: 700; color: #9B89C0; letter-spacing: .1em; text-transform: uppercase; flex: 1; }
+    .group-count { font-size: 11px; color: #6B5892; }
 
     /* Edit mode - exercises */
-    .edit-ex-row { display: flex; align-items: center; padding: 9px 12px 9px 8px; background: #242f48; border-radius: 9px; margin-bottom: 5px; margin-left: 4px; border: 2px solid transparent; transition: border-color .15s; }
-    .edit-ex-row.drag-target { border-color: #e05050; }
-    .ex-drag-handle { color: #3a4f6e; cursor: grab; touch-action: none; flex-shrink: 0; padding: 2px 8px 2px 2px; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; }
-    .edit-ex-name { font-size: 14px; color: #dde6f5; flex: 1; }
-    .del-master-btn { background: none; border: none; cursor: pointer; color: #506080; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; flex-shrink: 0; }
-    .del-master-btn:active { color: #e05050; }
+    .edit-ex-row { display: flex; align-items: center; padding: 9px 12px 9px 8px; background: #251B36; border-radius: 9px; margin-bottom: 5px; margin-left: 4px; border: 2px solid transparent; transition: border-color .15s; }
+    .edit-ex-row.drag-target { border-color: #7D39EB; }
+    .ex-drag-handle { color: #4D3D70; cursor: grab; touch-action: none; flex-shrink: 0; padding: 2px 8px 2px 2px; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; }
+    .edit-ex-name { font-size: 14px; color: #F2F0FA; flex: 1; }
+    .del-master-btn { background: none; border: none; cursor: pointer; color: #6B5892; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; flex-shrink: 0; }
+    .del-master-btn:active { color: #7D39EB; }
 
     /* Ghost elements */
-    #drag-ghost { position: fixed; pointer-events: none; z-index: 999; opacity: 0.92; transform: scale(1.02); box-shadow: 0 12px 40px rgba(0,0,0,.6); border-radius: 18px; overflow: hidden; background: #1a2540; }
-    #group-drag-ghost { position: fixed; pointer-events: none; z-index: 998; background: #e05050; border-radius: 9px; padding: 8px 14px; color: white; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: 0.9; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
-    #ex-drag-ghost { position: fixed; pointer-events: none; z-index: 997; background: #e05050; border-radius: 9px; padding: 9px 14px; color: white; font-size: 14px; opacity: 0.9; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
+    #drag-ghost { position: fixed; pointer-events: none; z-index: 999; opacity: 0.92; transform: scale(1.02); box-shadow: 0 12px 40px rgba(0,0,0,.6); border-radius: 18px; overflow: hidden; background: #1B1427; }
+    #group-drag-ghost { position: fixed; pointer-events: none; z-index: 998; background: #7D39EB; border-radius: 9px; padding: 8px 14px; color: #F2F0FA; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: 0.9; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
+    #ex-drag-ghost { position: fixed; pointer-events: none; z-index: 997; background: #7D39EB; border-radius: 9px; padding: 9px 14px; color: #F2F0FA; font-size: 14px; opacity: 0.9; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
 
-    .empty { text-align: center; color: #506080; padding: 40px 20px; font-size: 15px; line-height: 1.7; }
-    .toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%) translateY(-10px); background: #2e3c5a; color: #dde6f5; padding: 10px 18px; border-radius: 11px; font-size: 14px; font-weight: 600; z-index: 1000; opacity: 0; transition: opacity .25s, transform .25s; white-space: nowrap; pointer-events: none; }
+    .empty { text-align: center; color: #6B5892; padding: 40px 20px; font-size: 15px; line-height: 1.7; }
+    .toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%) translateY(-10px); background: #251B36; color: #F2F0FA; padding: 10px 18px; border-radius: 11px; font-size: 14px; font-weight: 600; z-index: 1000; opacity: 0; transition: opacity .25s, transform .25s; white-space: nowrap; pointer-events: none; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
