@@ -4,6 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>筋トレ記録</title>
+  <link rel="icon" id="favicon">
+  <link rel="apple-touch-icon" id="ati">
+  <link rel="manifest" id="pwa-manifest">
+  <meta name="theme-color" content="#0D0B12">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="筋トレ記録">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { overscroll-behavior: none; }
@@ -511,6 +518,28 @@ function toast(msg){
   clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),2400);
 }
 
+// ── Icons / PWA ───────────────────────────────────────────────────────────────
+function initIcons(){
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#0D0B12"/><rect x="10" y="28" width="14" height="44" rx="4" fill="#B5E82E"/><rect x="24" y="35" width="8" height="30" rx="3" fill="#B5E82E"/><rect x="32" y="46" width="36" height="8" rx="4" fill="#B5E82E"/><rect x="68" y="35" width="8" height="30" rx="3" fill="#B5E82E"/><rect x="76" y="28" width="14" height="44" rx="4" fill="#B5E82E"/></svg>`;
+  document.getElementById('favicon').type='image/svg+xml';
+  document.getElementById('favicon').href='data:image/svg+xml,'+encodeURIComponent(svg);
+  function makeIcon(size){
+    const c=document.createElement('canvas'); c.width=c.height=size;
+    const ctx=c.getContext('2d'), r=size/100;
+    const rr=(x,y,w,h,rx)=>{ctx.beginPath();if(ctx.roundRect)ctx.roundRect(x,y,w,h,rx);else ctx.rect(x,y,w,h);ctx.fill();};
+    ctx.fillStyle='#0D0B12'; rr(0,0,size,size,22*r);
+    ctx.fillStyle='#B5E82E';
+    [[10,28,14,44,4],[24,35,8,30,3],[32,46,36,8,4],[68,35,8,30,3],[76,28,14,44,4]].forEach(([x,y,w,h,rx])=>rr(x*r,y*r,w*r,h*r,rx*r));
+    return c.toDataURL('image/png');
+  }
+  const p192=makeIcon(192), p512=makeIcon(512);
+  document.getElementById('ati').href=p512;
+  try{
+    const m=JSON.stringify({name:'筋トレ記録',short_name:'筋トレ',display:'standalone',background_color:'#0D0B12',theme_color:'#0D0B12',start_url:'.',icons:[{src:p192,sizes:'192x192',type:'image/png'},{src:p512,sizes:'512x512',type:'image/png'}]});
+    document.getElementById('pwa-manifest').href=URL.createObjectURL(new Blob([m],{type:'application/json'}));
+  }catch(e){}
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 function hasData() { return exercises.length > 0; }
 
@@ -532,6 +561,7 @@ window.addEventListener('popstate', () => {
 
 loadMasterList();
 renderExercises();
+initIcons();
 </script>
 </body>
 </html>
