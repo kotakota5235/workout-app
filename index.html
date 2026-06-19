@@ -27,7 +27,7 @@
     /* Top actions */
     .top-actions { display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px; }
     .icon-btn {
-      width: 40px; height: 40px; border-radius: 10px; background: #1B1427;
+      width: 44px; height: 44px; border-radius: 10px; background: #1B1427;
       border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
       color: #9B89C0; -webkit-tap-highlight-color: transparent;
     }
@@ -51,23 +51,24 @@
     .ex-name { font-size: 16px; font-weight: 700; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .muscle-tag { background: #251B36; color: #9B89C0; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 7px; flex-shrink: 0; }
     .del-ex-btn {
-      padding: 14px 14px 14px 6px; background: none; border: none; cursor: pointer;
-      color: #6B5892; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; flex-shrink: 0;
+      padding: 14px 16px 14px 10px; background: none; border: none; cursor: pointer;
+      color: #6B5892; display: flex; align-items: center; justify-content: center;
+      min-width: 48px; min-height: 48px; -webkit-tap-highlight-color: transparent; flex-shrink: 0;
     }
     .del-ex-btn:active { color: #7D39EB; }
 
     /* Sets */
-    .sets-head { display: grid; grid-template-columns: 36px 1fr 1fr 30px; padding: 7px 14px; font-size: 10px; font-weight: 700; color: #9B89C0; letter-spacing: .1em; text-transform: uppercase; border-top: 1px solid #251B36; }
+    .sets-head { display: grid; grid-template-columns: 34px 1fr 1fr 44px; padding: 7px 14px; font-size: 10px; font-weight: 700; color: #9B89C0; letter-spacing: .1em; text-transform: uppercase; border-top: 1px solid #251B36; }
     .sets-head span:nth-child(2), .sets-head span:nth-child(3) { text-align: center; }
-    .set-row { display: grid; grid-template-columns: 36px 1fr 1fr 30px; align-items: center; padding: 5px 14px; gap: 7px; }
-    .set-num { width: 28px; height: 28px; background: #251B36; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #B5E82E; }
+    .set-row { display: grid; grid-template-columns: 34px 1fr 1fr 44px; align-items: center; padding: 5px 14px; gap: 7px; }
+    .set-num { width: 30px; height: 30px; background: #251B36; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #B5E82E; }
     .input-wrap { position: relative; display: flex; align-items: center; }
-    .set-input { width: 100%; background: #251B36; border: 2px solid transparent; border-radius: 9px; color: #B5E82E; font-size: 17px; font-weight: 700; text-align: right; padding: 8px 28px 8px 8px; outline: none; transition: border-color .15s; -webkit-appearance: none; }
+    .set-input { width: 100%; background: #251B36; border: 2px solid transparent; border-radius: 9px; color: #B5E82E; font-size: 17px; font-weight: 700; text-align: right; padding: 11px 28px 11px 8px; outline: none; transition: border-color .15s; -webkit-appearance: none; }
     .set-input:focus { border-color: #7D39EB; background: #2A1E45; }
     .unit { position: absolute; right: 8px; font-size: 11px; font-weight: 600; color: #9B89C0; pointer-events: none; }
-    .del-set-btn { background: none; border: none; cursor: pointer; color: #6B5892; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; }
+    .del-set-btn { background: none; border: none; cursor: pointer; color: #6B5892; padding: 4px; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }
     .del-set-btn:active { color: #7D39EB; }
-    .add-set-btn { width: 100%; padding: 13px; background: none; border: none; border-top: 1px solid #251B36; color: #9B89C0; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; -webkit-tap-highlight-color: transparent; }
+    .add-set-btn { width: 100%; padding: 16px; background: none; border: none; border-top: 1px solid #251B36; color: #9B89C0; font-size: 15px; font-weight: 600; cursor: pointer; text-align: center; -webkit-tap-highlight-color: transparent; }
     .add-set-btn:active { background: #1E1535; }
 
     /* FAB */
@@ -80,21 +81,21 @@
     .modal { background: #1B1427; border-radius: 22px 22px 0 0; padding: 22px; width: 100%; max-height: 78vh; overflow-y: auto; }
     .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
     .modal-title { font-size: 18px; font-weight: 800; }
-    .modal-close { background: none; border: none; color: #9B89C0; font-size: 22px; cursor: pointer; padding: 2px 6px; }
-    .edit-toggle-btn { background: #251B36; border: none; border-radius: 8px; color: #9B89C0; font-size: 13px; font-weight: 600; padding: 6px 14px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .modal-close { background: none; border: none; color: #9B89C0; font-size: 24px; cursor: pointer; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+    .edit-toggle-btn { background: #251B36; border: none; border-radius: 8px; color: #9B89C0; font-size: 14px; font-weight: 600; padding: 10px 16px; min-height: 44px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
     .edit-toggle-btn.active { background: #7D39EB; color: #F2F0FA; }
 
     /* Custom add form */
     .custom-row { display: flex; gap: 8px; margin-bottom: 14px; }
-    .custom-input { flex: 1; background: #251B36; border: 2px solid transparent; border-radius: 11px; color: #B5E82E; font-size: 15px; padding: 11px 13px; outline: none; }
+    .custom-input { flex: 1; min-width: 0; background: #251B36; border: 2px solid transparent; border-radius: 11px; color: #B5E82E; font-size: 16px; padding: 13px; min-height: 48px; outline: none; }
     .custom-input:focus { border-color: #7D39EB; }
-    .muscle-sel { background: #251B36; border: 2px solid transparent; border-radius: 11px; color: #F2F0FA; font-size: 15px; padding: 11px 10px; outline: none; -webkit-appearance: none; }
-    .modal-add-btn { background: #7D39EB; border: none; border-radius: 11px; color: #F2F0FA; font-size: 15px; font-weight: 700; padding: 11px 16px; cursor: pointer; white-space: nowrap; }
+    .muscle-sel { background: #251B36; border: 2px solid transparent; border-radius: 11px; color: #F2F0FA; font-size: 15px; padding: 13px 10px; min-height: 48px; outline: none; -webkit-appearance: none; }
+    .modal-add-btn { background: #7D39EB; border: none; border-radius: 11px; color: #F2F0FA; font-size: 15px; font-weight: 700; padding: 13px 16px; min-height: 48px; cursor: pointer; white-space: nowrap; -webkit-tap-highlight-color: transparent; }
     .modal-add-btn:active { background: #6A2CC8; }
 
     /* Preset list - normal mode */
     .group-label { font-size: 11px; font-weight: 700; color: #9B89C0; letter-spacing: .1em; text-transform: uppercase; margin: 12px 2px 6px; }
-    .preset-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #251B36; border-radius: 11px; border: none; width: 100%; text-align: left; color: #F2F0FA; font-size: 15px; cursor: pointer; margin-bottom: 6px; -webkit-tap-highlight-color: transparent; }
+    .preset-item { display: flex; align-items: center; justify-content: space-between; padding: 15px 14px; min-height: 50px; background: #251B36; border-radius: 11px; border: none; width: 100%; text-align: left; color: #F2F0FA; font-size: 15px; cursor: pointer; margin-bottom: 6px; -webkit-tap-highlight-color: transparent; }
     .preset-item:active { background: #2F2445; }
     .preset-item.used { opacity: .38; pointer-events: none; }
     .pi-right { font-size: 12px; color: #9B89C0; }
@@ -112,7 +113,7 @@
     .edit-ex-row.drag-target { border-color: #7D39EB; }
     .ex-drag-handle { color: #4D3D70; cursor: grab; touch-action: none; flex-shrink: 0; padding: 2px 8px 2px 2px; -webkit-tap-highlight-color: transparent; display: flex; align-items: center; }
     .edit-ex-name { font-size: 14px; color: #F2F0FA; flex: 1; }
-    .del-master-btn { background: none; border: none; cursor: pointer; color: #6B5892; padding: 4px; display: flex; align-items: center; -webkit-tap-highlight-color: transparent; flex-shrink: 0; }
+    .del-master-btn { background: none; border: none; cursor: pointer; color: #6B5892; padding: 4px; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; flex-shrink: 0; }
     .del-master-btn:active { color: #7D39EB; }
 
     /* Ghost elements */
@@ -205,15 +206,29 @@ function loadMasterList() {
 function saveMasterList() {
   try { localStorage.setItem('workout_master_v1',JSON.stringify(masterList)); } catch{}
 }
+function saveCurrent() {
+  try { localStorage.setItem('workout_current_v1',JSON.stringify({exercises,uid})); } catch{}
+}
+function loadCurrent() {
+  try {
+    const s=localStorage.getItem('workout_current_v1');
+    if(!s) return;
+    const d=JSON.parse(s);
+    if(d&&Array.isArray(d.exercises)){
+      exercises=d.exercises;
+      uid=(typeof d.uid==='number'&&d.uid>0)?d.uid:(exercises.reduce((m,e)=>Math.max(m,e.id||0),0)+1);
+    }
+  } catch { exercises=[]; uid=1; }
+}
 
 // ── Exercises (current workout) ───────────────────────────────────────────────
-function addExercise(name,muscle){ exercises.push({id:uid++,name,muscle,collapsed:false,sets:[{w:'',r:''}]}); renderExercises(); }
-function deleteExercise(id){ exercises=exercises.filter(e=>e.id!==id); renderExercises(); }
+function addExercise(name,muscle){ exercises.push({id:uid++,name,muscle,collapsed:false,sets:[{w:'',r:''}]}); saveCurrent();renderExercises(); }
+function deleteExercise(id){ exercises=exercises.filter(e=>e.id!==id); saveCurrent();renderExercises(); }
 function toggleCollapse(id){ const ex=exercises.find(e=>e.id===id); if(ex){ex.collapsed=!ex.collapsed;saveCurrent();renderExercises();} }
 function addSet(id){ const ex=exercises.find(e=>e.id===id); if(!ex)return; const p=ex.sets[ex.sets.length-1]; ex.sets.push({w:p?p.w:'',r:p?p.r:''}); saveCurrent();renderExercises(); }
 function deleteSet(id,i){ const ex=exercises.find(e=>e.id===id); if(ex&&ex.sets.length>1){ex.sets.splice(i,1);saveCurrent();renderExercises();} }
-function setW(id,i,v){ const ex=exercises.find(e=>e.id===id); if(ex){ex.sets[i].w=v;} }
-function setR(id,i,v){ const ex=exercises.find(e=>e.id===id); if(ex){ex.sets[i].r=v;} }
+function setW(id,i,v){ const ex=exercises.find(e=>e.id===id); if(ex){ex.sets[i].w=v;saveCurrent();} }
+function setR(id,i,v){ const ex=exercises.find(e=>e.id===id); if(ex){ex.sets[i].r=v;saveCurrent();} }
 
 // ── Workout card drag ─────────────────────────────────────────────────────────
 let drag=null;
@@ -252,7 +267,7 @@ function onDragEnd(){
   document.removeEventListener('touchmove',onDragMove); document.removeEventListener('touchend',onDragEnd);
   document.removeEventListener('mousemove',onDragMove); document.removeEventListener('mouseup',onDragEnd);
   const fi=exercises.findIndex(e=>e.id===drag.id);
-  if(fi!==drag.tIdx){const[m]=exercises.splice(fi,1);exercises.splice(drag.tIdx,0,m);}
+  if(fi!==drag.tIdx){const[m]=exercises.splice(fi,1);exercises.splice(drag.tIdx,0,m);saveCurrent();}
   document.querySelectorAll('.exercise-card').forEach(c=>c.classList.remove('drag-over'));
   drag.ghost.remove(); drag.card.classList.remove('dragging'); drag=null; renderExercises();
 }
@@ -560,6 +575,7 @@ window.addEventListener('popstate', () => {
 });
 
 loadMasterList();
+loadCurrent();
 renderExercises();
 initIcons();
 </script>
